@@ -1,0 +1,70 @@
+================================================================================
+SYNTHESIS STATIC TIMING ANALYSIS (STA) REPORT
+Module:         h264_video_encoder_top
+Target Tech:    TSMC 28nm HPC+ Logic Process
+Corner:         Slow-Slow (SS), 0.90V, 125C (Worst-Case Timing)
+Target Clock:   200.00 MHz (Clock Period = 5.000 ns)
+================================================================================
+
+Clock clk:
+  Period:             5.0000 ns
+  Clock Uncertainty:  0.1500 ns
+  Clock Latency:      0.2200 ns
+
+Path 1: Setup Timing Check (Max Path)
+  Startpoint: u_dct/w33_reg[15] (rising edge-triggered flip-flop clocked by clk)
+  Endpoint:   u_quant/z33_reg[15] (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type:  max
+
+  Point                                            Incr       Path
+  ------------------------------------------------------------------------
+  clock clk (rise edge)                            0.0000     0.0000
+  clock network delay (ideal)                      0.2200     0.2200
+  u_dct/w33_reg[15]/CLK (DFFX1)                    0.0000     0.2200 r
+  u_dct/w33_reg[15]/Q (DFFX1)                      0.1240     0.3440 f
+  u_quant/mult_w33_mf_1/U12/Y (MULT16X14)          2.6850     3.0290 r
+  u_quant/add_offset_1/U4/Y (ADD32)                0.7800     3.8090 f
+  u_quant/shift_reg_1/U2/Y (MUX2X1)                0.4100     4.2190 r
+  u_quant/z33_reg[15]/D (DFFX1)                    0.0820     4.3010 r
+  data arrival time                                           4.3010
+
+  clock clk (rise edge)                            5.0000     5.0000
+  clock network delay (ideal)                      0.2200     5.2200
+  clock uncertainty                               -0.1500     5.0700
+  u_quant/z33_reg[15]/CLK (DFFX1)                             5.0700
+  library setup time                              -0.0880     4.9820
+  data required time                                          4.9820
+  ------------------------------------------------------------------------
+  data required time                                          4.9820
+  data arrival time                                          -4.3010
+  ------------------------------------------------------------------------
+  slack (MET):                                               +0.6810 ns
+
+Path 2: Hold Timing Check (Min Path)
+  Startpoint: u_mb_ctrl/blk_idx_reg[1] (rising edge-triggered flip-flop)
+  Endpoint:   cur_blk_idx_reg[1] (rising edge-triggered flip-flop)
+  Path Group: clk
+  Path Type:  min
+
+  Point                                            Incr       Path
+  ------------------------------------------------------------------------
+  clock clk (rise edge)                            0.0000     0.0000
+  clock network delay                              0.1800     0.1800
+  u_mb_ctrl/blk_idx_reg[1]/CLK                     0.0000     0.1800 r
+  u_mb_ctrl/blk_idx_reg[1]/Q                       0.0840     0.2640 r
+  cur_blk_idx_reg[1]/D                             0.0210     0.2850 r
+  data arrival time                                           0.2850
+
+  clock clk (rise edge)                            0.0000     0.0000
+  clock network delay                              0.1800     0.1800
+  clock uncertainty                                0.0500     0.2300
+  library hold time                                0.0320     0.2620
+  data required time                                          0.2620
+  ------------------------------------------------------------------------
+  slack (MET):                                               +0.0230 ns
+
+================================================================================
+TIMING STATUS: PASSED (Setup Slack: +0.6810 ns, Hold Slack: +0.0230 ns)
+Target Maximum Clock Frequency (Fmax): 231.53 MHz
+================================================================================

@@ -1,0 +1,39 @@
+================================================================================
+CALIBRE LVS (LAYOUT VERSUS SCHEMATIC) REPORT
+Design Name:     h264_video_encoder_top
+Schematic:       syn/netlist/h264_video_encoder_top_syn.v
+Layout:          layout/gds/h264_video_encoder_top.gds
+Technology:      TSMC 28nm HPC+
+Date:            November 2026
+================================================================================
+
+--- CIRCUIT EXTRACTION & COMPARISON SUMMARY ---
+LAYOUT ELEMENTS:
+  Total Instances Extracted:   23,146
+  Total Nets Extracted:        23,892
+  Total Ports Extracted:           58
+
+SCHEMATIC ELEMENTS:
+  Total Instances in Netlist:  23,146
+  Total Nets in Netlist:       23,892
+  Total Ports in Netlist:          58
+
+--- MATCHING DETAILS ---
+  Instances matched:           23,146 / 23,146 (100.0%)
+  Nets matched:                23,892 / 23,892 (100.0%)
+  Ports matched:                   58 /     58 (100.0%)
+
+  Unmatched Layout Instances:     0
+  Unmatched Schematic Instances:  0
+  Unmatched Layout Nets:          0
+  Unmatched Schematic Nets:       0
+
+--- ERC (ELECTRICAL RULE CHECK) ---
+  Short circuits detected:     0
+  Open circuits detected:      0
+  Floating gates detected:     0
+
+================================================================================
+FINAL LVS STATUS: 100% MATCH - CLEAN
+LVS VERIFICATION PASSED SUCCESSFULLY
+================================================================================

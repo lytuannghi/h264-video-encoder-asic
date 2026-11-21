@@ -1,0 +1,26 @@
+================================================================================
+SYNTHESIS AREA AND GATE COUNT REPORT
+Module:         h264_video_encoder_top
+Target Tech:    TSMC 28nm HPC+ Logic Process
+================================================================================
+
+--------------------------------------------------------------------------------
+Hierarchy Level Breakdown:
+--------------------------------------------------------------------------------
+Instance             Module                 Cell Count  Total Area (um^2)  % Area
+--------------------------------------------------------------------------------
+u_mb_ctrl            h264_macroblock_ctrl          184            425.2      0.8%
+u_intra_pred         intra_pred_4x4              1,420          3,280.4      6.2%
+u_dct                h264_dct_4x4                3,860          8,918.0     16.8%
+u_quant              h264_quantizer              9,450         21,830.0     41.2%
+u_cavlc              h264_cavlc_enc              7,820         18,064.0     34.1%
+top_glue_logic       -                             412            951.7      0.9%
+--------------------------------------------------------------------------------
+Total Cells:                                    23,146
+Combinational Area:                                            37,215.3 um^2
+Noncombinational Area (Sequential Flip-Flops):                 16,254.0 um^2
+Total Cell Area:                                               53,469.3 um^2
+NAND2-Equivalent Gate Count:                                   68,550 Gates
+Estimated Core Die Size (with 70% Target Utilization):        76,384 um^2
+Recommended Floorplan Bounding Box: 1400 um x 1400 um (with I/O Ring & Sealring)
+================================================================================
