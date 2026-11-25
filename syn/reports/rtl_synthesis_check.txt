@@ -1,0 +1,24 @@
+================================================================================
+RTL SYNTHESIS READINESS & CONSTRAINT REPORT: h264-video-encoder-asic
+Method : Static Verilog/SV Structural Parser + SDC Constraint Audit
+Note   : Foundry Gate-Level Netlist & STA require PDK Liberty (.lib) + Synopsys/OpenROAD
+================================================================================
+RTL Source Files Inspected : 6
+Code Lines (Non-Comment)   : 689
+Sequential Blocks          : 6
+Combinational Blocks       : 4
+Declared reg/logic Signals : 63
+
+MODULE BREAKDOWN:
+  rtl\entropy\h264_cavlc_enc.v                  | modules=h264_cavlc_enc               | loc= 182 | seq= 1 | comb= 0
+  rtl\h264_video_encoder_top.v                  | modules=h264_video_encoder_top       | loc= 131 | seq= 0 | comb= 0
+  rtl\intra\intra_pred_4x4.v                    | modules=intra_pred_4x4               | loc=  76 | seq= 1 | comb= 1
+  rtl\quant\h264_quantizer.v                    | modules=h264_quantizer               | loc= 156 | seq= 1 | comb= 3
+  rtl\top\h264_macroblock_ctrl.v                | modules=h264_macroblock_ctrl         | loc=  66 | seq= 1 | comb= 0
+  rtl\transform\h264_dct_4x4.v                  | modules=h264_dct_4x4                 | loc=  78 | seq= 2 | comb= 0
+
+SDC CLOCK CONSTRAINTS:
+  h264_timing.sdc: port=clk | period=5.00 ns | target=200.00 MHz
+
+ARITHMETIC DIVISION/MODULO CHECK: CLEAN (0 combinational / or % operators)
+================================================================================

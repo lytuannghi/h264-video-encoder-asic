@@ -2,7 +2,7 @@
 # File: h264_timing.sdc
 # Module: h264_video_encoder_top
 # Target Frequency: 200.0 MHz (5.000 ns Period)
-# Technology: TSMC 28nm HPC+ Standard Cell Library (typical 0.9V, 25C)
+# Technology: SkyWater 130nm HD Standard Cell Library (typical 1.80V, 25C)
 ###############################################################################
 
 # Primary Clock Definition

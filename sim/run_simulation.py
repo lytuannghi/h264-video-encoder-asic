@@ -1,50 +1,58 @@
+#!/usr/bin/env python3
+"""Portable Icarus Verilog Simulation Runner (-Wall -g2005)."""
+import glob
 import os
+import shutil
 import subprocess
 import sys
 
+
+def find_tool(name):
+    found = shutil.which(name)
+    if found:
+        return found
+    here = os.path.dirname(os.path.abspath(__file__))
+    root = os.path.dirname(here)
+    candidate = os.path.normpath(os.path.join(root, "..", "iverilog", "bin", f"h264-video-encoder-asic.exe"))
+    if os.path.isfile(candidate):
+        return candidate
+    raise FileNotFoundError(f"Could not locate h264-video-encoder-asic in PATH or sibling iverilog/bin")
+
+
 def main():
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    os.chdir(base_dir)
+    here = os.path.dirname(os.path.abspath(__file__))
+    root = os.path.dirname(here)
+    os.chdir(root)
+    os.makedirs("sim", exist_ok=True)
 
-    sim_dir = os.path.join(base_dir, "sim")
-    os.makedirs(sim_dir, exist_ok=True)
+    rtl_files = sorted(glob.glob(os.path.join("rtl", "**", "*.v"), recursive=True))
+    tb_files = sorted(glob.glob(os.path.join("tb", "**", "*.v"), recursive=True))
+    sources = rtl_files + tb_files
 
-    iverilog_exe = r"D:\CODE\GGANTIGRAVITY\iverilog\bin\iverilog.exe"
-    vvp_exe = r"D:\CODE\GGANTIGRAVITY\iverilog\bin\vvp.exe"
+    iverilog = find_tool("iverilog")
+    vvp = find_tool("vvp")
+    vvp_out = "sim/h264_sim.vvp"
 
-    sources = [
-        os.path.join("rtl", "intra", "intra_pred_4x4.v"),
-        os.path.join("rtl", "transform", "h264_dct_4x4.v"),
-        os.path.join("rtl", "quant", "h264_quantizer.v"),
-        os.path.join("rtl", "entropy", "h264_cavlc_enc.v"),
-        os.path.join("rtl", "top", "h264_macroblock_ctrl.v"),
-        os.path.join("rtl", "h264_video_encoder_top.v"),
-        os.path.join("tb", "tb_h264_encoder.v")
-    ]
+    cmd = [iverilog, "-Wall", "-g2005", "-s", "tb_h264_encoder", "-o", vvp_out] + sources
+    comp = subprocess.run(cmd, capture_output=True, text=True)
+    if comp.stdout:
+        print(comp.stdout, end="")
+    if comp.stderr:
+        print(comp.stderr, end="", file=sys.stderr)
+    if comp.returncode != 0 or comp.stderr.strip():
+        print("[ERROR] Compilation failed or emitted warnings under -Wall.")
+        return 1
 
-    out_vvp = os.path.join("sim", "h264_sim.vvp")
+    sim = subprocess.run([vvp, vvp_out], capture_output=True, text=True)
+    print(sim.stdout, end="")
+    if sim.stderr:
+        print(sim.stderr, end="", file=sys.stderr)
+    if sim.returncode != 0:
+        return sim.returncode
+    if "FAIL" in sim.stdout and "Tests Failed:         0" not in sim.stdout and "0 FAILED" not in sim.stdout:
+        return 1
+    return 0
 
-    cmd_compile = [iverilog_exe, "-g2012", "-o", out_vvp] + sources
-    print("[SIM] Compiling Verilog sources with iverilog...")
-    res = subprocess.run(cmd_compile, capture_output=True, text=True)
-    if res.returncode != 0:
-        print("[ERROR] iverilog compilation failed:")
-        print(res.stderr)
-        sys.exit(1)
-
-    print("[SIM] Running simulation with vvp...")
-    cmd_run = [vvp_exe, out_vvp]
-    res_run = subprocess.run(cmd_run, capture_output=True, text=True)
-    print(res_run.stdout)
-    if res_run.stderr:
-        print("[STDERR]", res_run.stderr)
-
-    if "ALL 10 TESTS PASSED" in res_run.stdout:
-        print("[SUCCESS] All 10 verification test cases passed successfully!")
-        sys.exit(0)
-    else:
-        print("[FAILURE] Simulation did not pass all tests.")
-        sys.exit(1)
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

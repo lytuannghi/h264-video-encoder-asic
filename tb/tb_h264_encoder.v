@@ -223,18 +223,29 @@ module tb_h264_encoder;
             fail_count = fail_count + 1;
         end
 
-        // Wait for sub-block completion
-        @(posedge block_done);
+        // Wait for Test 9 macroblock completion before launching Test 10 in DC mode
+        @(posedge mb_done);
+        #10;
 
         // TEST 10: Intra Mode 2 (DC Prediction)
         $display("\n[TEST 10] Intra Mode 2 (DC Prediction) Test...");
         intra_mode = 2'b10;
         qp = 6'd32;
+        mb_start = 1;
+        #5;
+        mb_start = 0;
         @(posedge dut.u_intra_pred.res_valid);
         #1;
-        $display("-> TEST 10 PASSED: DC Prediction mode processed with residual D00=%0d.",
-                 dut.u_intra_pred.res_d00);
-        pass_count = pass_count + 1;
+        // DC = (100+105+110+115 + 90+95+100+105 + 4) >> 3 = 103; P00=102 -> D00 = -1
+        if (dut.u_intra_pred.res_d00 == -9'sd1) begin
+            $display("-> TEST 10 PASSED: DC Prediction residual accurate: D00=%0d (expected -1).",
+                     dut.u_intra_pred.res_d00);
+            pass_count = pass_count + 1;
+        end else begin
+            $display("-> TEST 10 FAILED: DC Prediction calculation mismatch: D00=%0d (expected -1).",
+                     dut.u_intra_pred.res_d00);
+            fail_count = fail_count + 1;
+        end
 
         #50;
         $display("\n==================================================================");

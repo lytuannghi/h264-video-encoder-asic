@@ -31,8 +31,64 @@ module h264_quantizer (
     output reg  signed [15:0] z30, z31, z32, z33
 );
 
-    wire [2:0] qp_rem = qp % 6;
-    wire [3:0] qp_per = qp / 6;
+    reg  [2:0] qp_rem;
+    reg  [3:0] qp_per;
+    always @(*) begin
+        case (qp)
+            6'd0:  begin qp_per = 4'd0; qp_rem = 3'd0; end
+            6'd1:  begin qp_per = 4'd0; qp_rem = 3'd1; end
+            6'd2:  begin qp_per = 4'd0; qp_rem = 3'd2; end
+            6'd3:  begin qp_per = 4'd0; qp_rem = 3'd3; end
+            6'd4:  begin qp_per = 4'd0; qp_rem = 3'd4; end
+            6'd5:  begin qp_per = 4'd0; qp_rem = 3'd5; end
+            6'd6:  begin qp_per = 4'd1; qp_rem = 3'd0; end
+            6'd7:  begin qp_per = 4'd1; qp_rem = 3'd1; end
+            6'd8:  begin qp_per = 4'd1; qp_rem = 3'd2; end
+            6'd9:  begin qp_per = 4'd1; qp_rem = 3'd3; end
+            6'd10: begin qp_per = 4'd1; qp_rem = 3'd4; end
+            6'd11: begin qp_per = 4'd1; qp_rem = 3'd5; end
+            6'd12: begin qp_per = 4'd2; qp_rem = 3'd0; end
+            6'd13: begin qp_per = 4'd2; qp_rem = 3'd1; end
+            6'd14: begin qp_per = 4'd2; qp_rem = 3'd2; end
+            6'd15: begin qp_per = 4'd2; qp_rem = 3'd3; end
+            6'd16: begin qp_per = 4'd2; qp_rem = 3'd4; end
+            6'd17: begin qp_per = 4'd2; qp_rem = 3'd5; end
+            6'd18: begin qp_per = 4'd3; qp_rem = 3'd0; end
+            6'd19: begin qp_per = 4'd3; qp_rem = 3'd1; end
+            6'd20: begin qp_per = 4'd3; qp_rem = 3'd2; end
+            6'd21: begin qp_per = 4'd3; qp_rem = 3'd3; end
+            6'd22: begin qp_per = 4'd3; qp_rem = 3'd4; end
+            6'd23: begin qp_per = 4'd3; qp_rem = 3'd5; end
+            6'd24: begin qp_per = 4'd4; qp_rem = 3'd0; end
+            6'd25: begin qp_per = 4'd4; qp_rem = 3'd1; end
+            6'd26: begin qp_per = 4'd4; qp_rem = 3'd2; end
+            6'd27: begin qp_per = 4'd4; qp_rem = 3'd3; end
+            6'd28: begin qp_per = 4'd4; qp_rem = 3'd4; end
+            6'd29: begin qp_per = 4'd4; qp_rem = 3'd5; end
+            6'd30: begin qp_per = 4'd5; qp_rem = 3'd0; end
+            6'd31: begin qp_per = 4'd5; qp_rem = 3'd1; end
+            6'd32: begin qp_per = 4'd5; qp_rem = 3'd2; end
+            6'd33: begin qp_per = 4'd5; qp_rem = 3'd3; end
+            6'd34: begin qp_per = 4'd5; qp_rem = 3'd4; end
+            6'd35: begin qp_per = 4'd5; qp_rem = 3'd5; end
+            6'd36: begin qp_per = 4'd6; qp_rem = 3'd0; end
+            6'd37: begin qp_per = 4'd6; qp_rem = 3'd1; end
+            6'd38: begin qp_per = 4'd6; qp_rem = 3'd2; end
+            6'd39: begin qp_per = 4'd6; qp_rem = 3'd3; end
+            6'd40: begin qp_per = 4'd6; qp_rem = 3'd4; end
+            6'd41: begin qp_per = 4'd6; qp_rem = 3'd5; end
+            6'd42: begin qp_per = 4'd7; qp_rem = 3'd0; end
+            6'd43: begin qp_per = 4'd7; qp_rem = 3'd1; end
+            6'd44: begin qp_per = 4'd7; qp_rem = 3'd2; end
+            6'd45: begin qp_per = 4'd7; qp_rem = 3'd3; end
+            6'd46: begin qp_per = 4'd7; qp_rem = 3'd4; end
+            6'd47: begin qp_per = 4'd7; qp_rem = 3'd5; end
+            6'd48: begin qp_per = 4'd8; qp_rem = 3'd0; end
+            6'd49: begin qp_per = 4'd8; qp_rem = 3'd1; end
+            6'd50: begin qp_per = 4'd8; qp_rem = 3'd2; end
+            default: begin qp_per = 4'd8; qp_rem = 3'd3; end
+        endcase
+    end
     wire [4:0] qbits  = 5'd15 + qp_per; // 15 to 23
 
     // Multiplication factor lookup
